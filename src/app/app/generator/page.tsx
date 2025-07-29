@@ -125,32 +125,42 @@ export default function AIJobApplicationGenerator() {
 
   const handleGenerate = async () => {
     if (!validateForm()) return;
-  
+
     setIsLoading(true);
-  
+
     try {
-      // 1. Read resume file
-      const resumeText = await formData.resumeFile?.text(); // reads file content as text
-  
-      const payload = {
-        resume: resumeText,
-        jobDescription: inputType === "text" ? formData.jobDescription : "",
-        jobUrl: inputType === "url" ? formData.jobUrl : "",
-        linkedinUrl: formData.linkedinUrl,
-      };
-  
+      // const resumeText = await formData.resumeFile?.text();
+
+      // const payload = {
+      //   resume: resumeText,
+      //   jobDescription: inputType === "text" ? formData.jobDescription : "",
+      //   jobUrl: inputType === "url" ? formData.jobUrl : "",
+      //   linkedinUrl: formData.linkedinUrl,
+      // };
+
+      // const res = await fetch("/api/generate", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // });
+      const form = new FormData();
+      form.append("resume", formData.resumeFile!);
+      form.append("linkedinUrl", formData.linkedinUrl);
+      form.append(
+        "jobDescription",
+        inputType === "text" ? formData.jobDescription : ""
+      );
+      form.append("jobUrl", inputType === "url" ? formData.jobUrl : "");
+
       const res = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: form,
       });
-  
+
       const data = await res.json();
-  
+
       if (data.success) {
-        // Save result to localStorage (or state, or Supabase if logged in)
         localStorage.setItem("ai-result", JSON.stringify(data.result));
-        
         router.push("generator/results");
       } else {
         alert("AI generation failed. Try again later.");
@@ -162,7 +172,6 @@ export default function AIJobApplicationGenerator() {
       setIsLoading(false);
     }
   };
-  
 
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);

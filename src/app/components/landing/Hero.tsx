@@ -1,6 +1,7 @@
 // components/Hero.tsx
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import * as router from "routi"
 
 interface ThreeJSRefs {
   scene: THREE.Scene;
@@ -123,6 +124,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <button
               onClick={showDemo}
+              
               className="bg-white/20 text-white px-8 py-4 border-2 border-white/30 rounded-full font-semibold text-lg backdrop-blur-md hover:bg-white/30 hover:transform hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
             >
               Get Started Free

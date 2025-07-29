@@ -66,10 +66,26 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
           </button>
         </div>
         <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-200 whitespace-pre-wrap">
-          <p className="text-gray-700">
-            {resumeTips ||
-              "Your resume optimization tips will appear here after generation."}
-          </p>
+          {resumeTips ? (
+            typeof resumeTips === "string" ? (
+              <p className="text-gray-700">{resumeTips}</p>
+            ) : (
+              <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                {Object.entries(resumeTips).map(([key, value]) => (
+                  <li key={key}>
+                    <strong className="capitalize">{key}:</strong>{" "}
+                    {typeof value === "string" || typeof value === "number"
+                      ? value
+                      : JSON.stringify(value)}
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : (
+            <p className="text-gray-500 italic">
+              Your resume optimization tips will appear here after generation.
+            </p>
+          )}
         </div>
       </div>
 
